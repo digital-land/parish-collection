@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        lfs: true
     - uses: actions/setup-python@v2
       with:
         python-version: 3.8
@@ -36,6 +38,7 @@ jobs:
         git config user.name "${DLB_BOT_USERNAME}"
         git remote set-url origin https://${DLB_BOT_USERNAME}:${DLB_BOT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         git checkout ${GITHUB_REF##*/}
+        git lfs checkout
 
     - name: Update makerules
       run: make makerules
