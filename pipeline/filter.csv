@@ -1,0 +1,2 @@
+pipeline,resource,field,pattern
+parish,,geography,"^[WNS]"
