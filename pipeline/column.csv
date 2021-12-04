@@ -1,5 +1,4 @@
 pipeline,resource,pattern,value
 parish,,WKT,geometry
-parish,,par19cd,geography
-parish,,par19cd,reference
+parish,,par19cd,parish
 parish,,par19nm,name
