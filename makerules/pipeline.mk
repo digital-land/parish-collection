@@ -60,6 +60,7 @@ define build-dataset =
 	mkdir -p $(@D)
 	time digital-land --pipeline-name $(notdir $(basename $@)) load-entries --output-path $(basename $@).sqlite3 $(^)
 	time digital-land --pipeline-name $(notdir $(basename $@)) build-dataset $(basename $@).sqlite3 $@
+	md5sum $@ $(basename $@).sqlite3
 endef
 
 collection:: collection/pipeline.mk
@@ -130,3 +131,6 @@ push-dataset-s3::
 pipeline-run::
 	aws batch submit-job --job-name $(REPOSITORY)-$(shell date '+%Y-%m-%d-%H-%M-%S') --job-queue dl-batch-queue --job-definition dl-batch-def --container-overrides '{"environment": [{"name":"BATCH_FILE_URL","value":"https://raw.githubusercontent.com/digital-land/docker-builds/main/pipeline_run.sh"}, {"name" : "REPOSITORY","value" : "$(REPOSITORY)"}]}'
 
+var/converted/%.csv: collection/resource/%
+	mkdir -p var/converted/
+	digital-land convert $<
