@@ -58,8 +58,8 @@ endef
 
 define build-dataset =
 	mkdir -p $(@D)
-	time digital-land --pipeline-name $(notdir $(basename $@)) load-entries --output-path $(basename $@).sqlite3 $(^)
-	time digital-land --pipeline-name $(notdir $(basename $@)) build-dataset $(basename $@).sqlite3 $@
+	time digital-land --pipeline-name $(notdir $(basename $@)) dataset-create --output-path $(basename $@).sqlite3 $(^)
+	time digital-land --pipeline-name $(notdir $(basename $@)) dataset-entries $(basename $@).sqlite3 $@
 	md5sum $@ $(basename $@).sqlite3
 endef
 
@@ -134,3 +134,13 @@ pipeline-run::
 var/converted/%.csv: collection/resource/%
 	mkdir -p var/converted/
 	digital-land convert $<
+
+
+metadata.json:
+	echo "{}" > $@
+
+datasette:	metadata.json
+	datasette serve $(DATASET_DIR)/*.sqlite3 \
+	--setting sql_time_limit_ms 5000 \
+	--load-extension $(SPATIALITE_EXTENSION) \
+	--metadata metadata.json
