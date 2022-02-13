@@ -1,2 +1,2 @@
-pipeline,resource,field,pattern
-parish,,geography,"^[WNS]"
+dataset,resource,field,pattern
+parish,,reference,"^[WNS]"
